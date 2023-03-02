@@ -3,7 +3,7 @@ Microservice of Helps for Mechanize (API).
 
 ## About
 - Read the [architecture](https://github.com/tech-warriors-corporation/mechanize-api#architecture) project;
-- Database name is _mechanize_helps_.
+- Database name is _mechanize_helps_;
 - Prefix in routes should be **/api/helps**.
 
 ## Installing
