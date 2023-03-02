@@ -1,0 +1,17 @@
+DROP TYPE status CASCADE;
+
+CREATE TYPE status AS ENUM ('attending', 'solved');
+
+DROP TABLE services CASCADE;
+
+CREATE TABLE services (
+  id SERIAL PRIMARY KEY,
+  driver_id INT NOT NULL,
+  mechanic_id INT NOT NULL,
+  vehicle VARCHAR(100) NOT NULL,
+  location VARCHAR(200) NOT NULL,
+  description VARCHAR(400) NOT NULL,
+  status status NOT NULL DEFAULT 'attending'
+);
+
+COMMIT;
