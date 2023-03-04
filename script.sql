@@ -2,9 +2,9 @@ DROP TYPE status CASCADE;
 
 CREATE TYPE status AS ENUM ('attending', 'solved');
 
-DROP TABLE services CASCADE;
+DROP TABLE tickets CASCADE;
 
-CREATE TABLE services (
+CREATE TABLE tickets (
   id SERIAL PRIMARY KEY,
   driver_id INT NOT NULL,
   mechanic_id INT NOT NULL,
