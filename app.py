@@ -1,10 +1,6 @@
 from flask import Flask
 from flask_cors import CORS
 from dotenv import load_dotenv, find_dotenv
-from clients.users_client import UsersClient
-from uuid import uuid4
-from enums.user_role_enum import UserRoleEnum
-from enums.ticket_status_enum import TicketStatusEnum
 from controllers.tickets_controller import TicketsController
 from services.tickets_service import TicketsService
 from repositories.ticket_repository import TicketRepository
