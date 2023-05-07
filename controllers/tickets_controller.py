@@ -15,7 +15,7 @@ class TicketsController(Controller):
     def create(self):
         try:
             data = request.get_json()
-            id = self.__tickets_service.create(data['driver_id'], data['vehicle'], data['location'], data['description'], data['status'])
+            id = self.__tickets_service.create(int(data['driver_id']), data['vehicle'], data['location'], data['description'], data['status'])
 
             return generate_response(id, 201)
         except Exception as error:
