@@ -5,18 +5,12 @@ class TicketsService:
     def __init__(self, ticket_repository: TicketRepository):
         self.__ticket_repository = ticket_repository
 
-    def create(self, driver_id: int, mechanic_id: int, vehicle: str, location: str, description: str, status: TicketStatusEnum) -> int:
+    def create(self, driver_id: int, vehicle: str, location: str, description: str, status: TicketStatusEnum) -> int:
         if not driver_id:
             raise ValueError('Driver id is required')
 
         if not isinstance(driver_id, int):
             raise ValueError('Driver id should be integer')
-
-        if not mechanic_id:
-            raise ValueError('Mechanic id is required')
-
-        if not isinstance(mechanic_id, int):
-            raise ValueError('Mechanic id should be integer')
 
         if not vehicle:
             raise ValueError('Vehicle is required')
@@ -33,4 +27,4 @@ class TicketsService:
         if status != TicketStatusEnum.ATTENDING.value and status != TicketStatusEnum.SOLVED.value:
             raise ValueError('Status is invalid')
 
-        return self.__ticket_repository.create(driver_id, mechanic_id, vehicle, location, description, status)
+        return self.__ticket_repository.create(driver_id, vehicle, location, description, status)
