@@ -10,3 +10,8 @@ class UsersClient(Client):
         response = requests.get(f"{self._api_url}/has-valid-token", headers={ "Authorization": token, "clientId": client_id })
 
         return response.json()
+
+    def is_driver(self, token: str, client_id: str):
+        response = requests.get(f"{self._api_url}/is-driver", headers={ "Authorization": token, "clientId": client_id })
+
+        return response.json()

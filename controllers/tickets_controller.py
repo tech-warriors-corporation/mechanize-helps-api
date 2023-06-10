@@ -2,7 +2,7 @@ from services.tickets_service import TicketsService
 from response import generate_response
 from controllers.controller import Controller
 from flask import Flask, request
-from request import should_be_logged, should_be_valid_client_id
+from request import should_be_logged, should_be_valid_client_id, should_be_driver
 
 class TicketsController(Controller):
     def __init__(self, app: Flask, tickets_service: TicketsService):
@@ -15,6 +15,7 @@ class TicketsController(Controller):
 
     @should_be_valid_client_id
     @should_be_logged
+    @should_be_driver
     def create(self):
         try:
             data = request.get_json()

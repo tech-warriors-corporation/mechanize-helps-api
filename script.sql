@@ -1,6 +1,6 @@
 DROP TYPE status CASCADE;
 
-CREATE TYPE status AS ENUM ('attending', 'solved');
+CREATE TYPE status AS ENUM ('unsolved', 'solved');
 
 DROP TABLE tickets CASCADE;
 
@@ -11,7 +11,7 @@ CREATE TABLE tickets (
   location VARCHAR(200) NOT NULL,
   description VARCHAR(400) NOT NULL,
   mechanic_id INT,
-  status status NOT NULL DEFAULT 'attending'
+  status status NOT NULL DEFAULT 'unsolved'
 );
 
 COMMIT;

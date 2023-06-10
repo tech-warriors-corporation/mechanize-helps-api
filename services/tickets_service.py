@@ -24,7 +24,7 @@ class TicketsService:
         if not status:
             raise ValueError('Status is required')
 
-        if status != TicketStatusEnum.ATTENDING.value and status != TicketStatusEnum.SOLVED.value:
+        if status != TicketStatusEnum.UNSOLVED.value and status != TicketStatusEnum.SOLVED.value:
             raise ValueError('Status is invalid')
 
         return self.__ticket_repository.create(driver_id, vehicle, location, description, status)

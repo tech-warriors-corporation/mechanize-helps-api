@@ -7,6 +7,23 @@ from os import environ
 users_client = UsersClient(environ.get("ACCOUNTS_API_URL"))
 valid_client_id = environ.get('CLIENT_ID')
 
+def should_be_driver(callback):
+    def secure_function(*args, **kwargs):
+        token = request.headers.get('Authorization')
+        client_id = request.headers.get('clientId')
+
+        if token is None:
+            return generate_response(status_code=401)
+
+        if users_client.is_driver(token, client_id)['payload'] is True:
+            return callback(*args, **kwargs)
+
+        return generate_response(status_code=401)
+
+    secure_function.__name__ = callback.__name__
+
+    return secure_function
+
 def should_be_logged(callback):
     def secure_function(*args, **kwargs):
         token = request.headers.get('Authorization')
