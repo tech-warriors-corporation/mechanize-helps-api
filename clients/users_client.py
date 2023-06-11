@@ -1,6 +1,5 @@
 import requests
 from clients.client import Client
-from enums.user_role_enum import UserRoleEnum
 
 class UsersClient(Client):
     def __init__(self, api_url: str):
@@ -8,5 +7,10 @@ class UsersClient(Client):
 
     def has_valid_token(self, token: str, client_id: str):
         response = requests.get(f"{self._api_url}/has-valid-token", headers={ "Authorization": token, "clientId": client_id })
+
+        return response.json()
+
+    def is_driver(self, token: str, client_id: str):
+        response = requests.get(f"{self._api_url}/is-driver", headers={ "Authorization": token, "clientId": client_id })
 
         return response.json()

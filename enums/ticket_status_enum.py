@@ -1,5 +1,5 @@
 from enum import Enum
 
 class TicketStatusEnum(Enum):
-    ATTENDING = 'attending'
+    UNSOLVED = 'unsolved'
     SOLVED = 'solved'
