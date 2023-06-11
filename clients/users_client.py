@@ -1,6 +1,5 @@
 import requests
 from clients.client import Client
-from enums.user_role_enum import UserRoleEnum
 
 class UsersClient(Client):
     def __init__(self, api_url: str):
