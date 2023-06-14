@@ -1,6 +1,6 @@
 DROP TYPE status CASCADE;
 
-CREATE TYPE status AS ENUM ('unsolved', 'solved');
+CREATE TYPE status AS ENUM ('unsolved', 'solved', 'cancelled');
 
 DROP TABLE tickets CASCADE;
 

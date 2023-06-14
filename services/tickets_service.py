@@ -24,7 +24,16 @@ class TicketsService:
         if not status:
             raise ValueError('Status is required')
 
-        if status != TicketStatusEnum.UNSOLVED.value and status != TicketStatusEnum.SOLVED.value:
+        if status != TicketStatusEnum.UNSOLVED.value and status != TicketStatusEnum.SOLVED.value and status != TicketStatusEnum.CANCELLED.value:
             raise ValueError('Status is invalid')
 
         return self.__ticket_repository.create(driver_id, vehicle, location, description, status)
+
+    def cancel_ticket(self, id: int) -> int:
+        if not id:
+            raise ValueError('Id is required')
+
+        if not isinstance(id, int):
+            raise ValueError('Id should be integer')
+
+        return self.__ticket_repository.cancel_ticket(id)
