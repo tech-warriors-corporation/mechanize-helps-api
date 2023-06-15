@@ -1,6 +1,6 @@
 DROP TYPE status CASCADE;
 
-CREATE TYPE status AS ENUM ('unsolved', 'solved');
+CREATE TYPE status AS ENUM ('unsolved', 'solved', 'cancelled');
 
 DROP TABLE tickets CASCADE;
 
@@ -11,6 +11,8 @@ CREATE TABLE tickets (
   location VARCHAR(200) NOT NULL,
   description VARCHAR(400) NOT NULL,
   mechanic_id INT,
+  rating INT CHECK (rating >= 1 AND rating <= 5),
+  created_date DATE DEFAULT current_date,
   status status NOT NULL DEFAULT 'unsolved'
 );
 
