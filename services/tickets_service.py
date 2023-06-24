@@ -29,11 +29,83 @@ class TicketsService:
 
         return self.__ticket_repository.create(driver_id, vehicle, location, description, status)
 
-    def cancel_ticket(self, id: int) -> int:
+    def cancel_ticket(self, id: int, user_id: int) -> int:
         if not id:
             raise ValueError('Id is required')
 
         if not isinstance(id, int):
             raise ValueError('Id should be integer')
 
-        return self.__ticket_repository.cancel_ticket(id)
+        if not user_id:
+            raise ValueError('User id is required')
+
+        if not isinstance(user_id, int):
+            raise ValueError('User id should be integer')
+
+        return self.__ticket_repository.cancel_ticket(id, user_id)
+
+    def accept_ticket(self, id: int, mechanic_id: int) -> int:
+        if not id:
+            raise ValueError('Id is required')
+
+        if not isinstance(id, int):
+            raise ValueError('Id should be integer')
+
+        if not mechanic_id:
+            raise ValueError('Mechanic id is required')
+
+        if not isinstance(mechanic_id, int):
+            raise ValueError('Mechanic id should be integer')
+
+        return self.__ticket_repository.accept_ticket(id, mechanic_id)
+
+    def conclude_ticket(self, id: int, user_id: int) -> int:
+        if not id:
+            raise ValueError('Id is required')
+
+        if not isinstance(id, int):
+            raise ValueError('Id should be integer')
+
+        if not user_id:
+            raise ValueError('User id is required')
+
+        if not isinstance(user_id, int):
+            raise ValueError('User id should be integer')
+
+        return self.__ticket_repository.conclude_ticket(id, user_id)
+
+    def get_available_tickets(self, token: str, client_id: str):
+        return self.__ticket_repository.get_available_tickets(token, client_id)
+
+    def get_ticket_status(self, id: int):
+        if not id:
+            raise ValueError('Id is required')
+
+        if not isinstance(id, int):
+            raise ValueError('Id should be integer')
+
+        return self.__ticket_repository.get_ticket_status(id)
+
+    def rating_ticket(self, id: int, driver_id: int, rating: int):
+        if not id:
+            raise ValueError('Id is required')
+
+        if not isinstance(id, int):
+            raise ValueError('Id should be integer')
+
+        if not driver_id:
+            raise ValueError('Driver id is required')
+
+        if not isinstance(driver_id, int):
+            raise ValueError('Driver id should be integer')
+
+        if not rating:
+            raise ValueError('Rating is required')
+
+        if not isinstance(rating, int):
+            raise ValueError('Rating should be integer')
+
+        if rating < 1 or rating > 5:
+            raise ValueError('Rating should be smaller or equal than 5 and bigger or equal than 1')
+
+        return self.__ticket_repository.rating_ticket(id, driver_id, rating)
