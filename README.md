@@ -7,7 +7,7 @@ Microservice of Helps for Mechanize (API).
 - Prefix in routes should be **/api/helps**.
 
 ## Setup
-Create a `.env` file with `DB_ENV`, `DB_NAME`, `DB_USER`, `DB_PASSWORD`, `DB_HOST`, `DB_PORT`, `DB_NAME_REMOTE`, `DB_USER_REMOTE`, `DB_PASSWORD_REMOTE`, `DB_HOST_REMOTE`, `DB_PORT_REMOTE`, `CLIENT_ID`, `ACCOUNTS_API_URL`, `NOMINATIM_API_URL` and `GOOGLE_MAPS_API_URL` variables to work.
+Create a `.env` file with `DB_ENV`, `DB_NAME`, `DB_USER`, `DB_PASSWORD`, `DB_HOST`, `DB_PORT`, `DB_NAME_REMOTE`, `DB_USER_REMOTE`, `DB_PASSWORD_REMOTE`, `DB_HOST_REMOTE`, `DB_PORT_REMOTE`, `CLIENT_ID`, `ACCOUNTS_API_URL`, `NOMINATIM_API_URL` and `GOOGLE_MAPS_URL` variables to work.
 
 ## Installing
 Use `pip install -r requirements.txt` to install dependencies.
