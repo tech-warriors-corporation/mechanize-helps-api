@@ -12,7 +12,7 @@ CREATE TABLE tickets (
   description VARCHAR(400) NOT NULL,
   mechanic_id INT,
   rating INT CHECK (rating >= 1 AND rating <= 5),
-  created_date DATE DEFAULT current_date,
+  created_date TIMESTAMP DEFAULT current_timestamp,
   status status NOT NULL DEFAULT 'unsolved'
 );
 
