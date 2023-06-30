@@ -20,6 +20,7 @@ class TicketsController(Controller):
         self._app.add_url_rule('/api/helps/tickets/<int:id>/rating', 'rating_ticket', self.rating_ticket, methods=['PATCH'])
         self._app.add_url_rule('/api/helps/tickets/<int:id>/status', 'get_ticket_status', self.get_ticket_status, methods=['GET'])
         self._app.add_url_rule('/api/helps/tickets/available', 'get_available_tickets', self.get_available_tickets, methods=['GET'])
+        self._app.add_url_rule('/api/helps/tickets/current-ticket', 'get_current_ticket', self.get_current_ticket, methods=['GET'])
 
     @should_be_valid_client_id
     @should_be_logged
@@ -108,6 +109,19 @@ class TicketsController(Controller):
             driver_id = self.__users_client.get_id_by_token(token, client_id)['payload']
 
             return generate_response(self.__tickets_service.rating_ticket(id, driver_id, int(data['rating'])), 200)
+        except Exception as error:
+            print(error)
+            return generate_response(status_code=400)
+
+    @should_be_valid_client_id
+    @should_be_logged
+    def get_current_ticket(self):
+        try:
+            token = request.headers.get('Authorization')
+            client_id = request.headers.get('clientId')
+            user_id = self.__users_client.get_id_by_token(token, client_id)['payload']
+
+            return generate_response(self.__tickets_service.get_current_ticket(token, client_id, user_id), 200)
         except Exception as error:
             print(error)
             return generate_response(status_code=400)
