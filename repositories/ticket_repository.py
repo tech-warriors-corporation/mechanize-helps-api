@@ -113,3 +113,42 @@ class TicketRepository:
         self.__connection.close()
 
         return id
+
+    def get_current_ticket(self, token: str, client_id: str, user_id: int):
+        self.__connection = get_connection()
+        cursor = self.__connection.cursor()
+        unsolved_value = TicketStatusEnum.UNSOLVED.value
+
+        cursor.execute(
+            "SELECT id, driver_id, vehicle, location, description, created_date, mechanic_id, status "
+            "FROM tickets "
+            "WHERE (status = %s AND (driver_id = %s OR mechanic_id = %s)) OR "
+            "(status <> %s AND driver_id = %s AND mechanic_id IS NOT NULL AND rating IS NULL)",
+            (unsolved_value, user_id, user_id, unsolved_value, user_id)
+        )
+
+        item = cursor.fetchone()
+
+        if item is None:
+            return item
+
+        id = item[0]
+        mechanic_id = item[6]
+
+        if mechanic_id is None:
+            ticket_id = self.cancel_ticket(id, user_id)
+
+            if not isinstance(ticket_id, int):
+                raise ValueError('Ticket id should be integer')
+
+            return None
+
+        location = item[3].split(',')
+        ticket = self.__ticket_entity.generate_entity(token, client_id, id, item[1], item[2], location[0], location[1], item[4], item[5])
+        ticket['mechanic_id'] = mechanic_id
+        ticket['status'] = item[7]
+
+        cursor.close()
+        self.__connection.close()
+
+        return ticket

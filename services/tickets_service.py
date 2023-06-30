@@ -109,3 +109,24 @@ class TicketsService:
             raise ValueError('Rating should be smaller or equal than 5 and bigger or equal than 1')
 
         return self.__ticket_repository.rating_ticket(id, driver_id, rating)
+
+    def get_current_ticket(self, token: str, client_id: str, user_id: int):
+        if not token:
+            raise ValueError('Token is required')
+
+        if not isinstance(token, str):
+            raise ValueError('Token should be string')
+
+        if not client_id:
+            raise ValueError('Client id is required')
+
+        if not isinstance(client_id, str):
+            raise ValueError('Client id should be string')
+
+        if not user_id:
+            raise ValueError('User id is required')
+
+        if not isinstance(user_id, int):
+            raise ValueError('User id should be integer')
+
+        return self.__ticket_repository.get_current_ticket(token, client_id, user_id)
