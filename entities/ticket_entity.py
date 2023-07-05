@@ -3,6 +3,7 @@ from clients.nominatim_client import NominatimClient
 from os import environ
 from entities.entity import Entity
 import datetime
+from date import timezone
 
 class TicketEntity(Entity):
     def __init__(self):
@@ -14,6 +15,8 @@ class TicketEntity(Entity):
 
     def generate_entity(self, token: str, client_id: str, id: int, driver_id: int, vehicle: str, lat: str, lon: str, description: str, created_date: datetime.datetime):
         try:
+            created_date = created_date.astimezone(timezone)
+
             return {
                 'id': id,
                 'driver_name': self.__users_client.get_user_name_by_id(token, client_id, driver_id)['payload'],
