@@ -22,14 +22,20 @@ class TicketRepository:
 
         return id
 
-    def cancel_ticket(self, id: int, user_id: int) -> int:
+    def cancel_ticket(self, id: int, user_id: int, is_mechanic: bool) -> int:
         self.__connection = get_connection()
         cursor = self.__connection.cursor()
 
-        cursor.execute(
-            "UPDATE tickets SET status = %s WHERE id = %s AND (driver_id = %s OR mechanic_id = %s)",
-            (TicketStatusEnum.CANCELLED.value, id, user_id, user_id)
-        )
+        if is_mechanic is True:
+            cursor.execute(
+                "UPDATE tickets SET mechanic_id = NULL WHERE id = %s AND (driver_id = %s OR mechanic_id = %s)",
+                (id, user_id, user_id)
+            )
+        else:
+            cursor.execute(
+                "UPDATE tickets SET status = %s WHERE id = %s AND (driver_id = %s OR mechanic_id = %s)",
+                (TicketStatusEnum.CANCELLED.value, id, user_id, user_id)
+            )
 
         self.__connection.commit()
         cursor.close()
@@ -133,19 +139,9 @@ class TicketRepository:
             return item
 
         id = item[0]
-        mechanic_id = item[6]
-
-        if mechanic_id is None:
-            ticket_id = self.cancel_ticket(id, user_id)
-
-            if not isinstance(ticket_id, int):
-                raise ValueError('Ticket id should be integer')
-
-            return None
-
         location = item[3].split(',')
         ticket = self.__ticket_entity.generate_entity(token, client_id, id, item[1], item[2], location[0], location[1], item[4], item[5])
-        ticket['mechanic_id'] = mechanic_id
+        ticket['mechanic_id'] = item[6]
         ticket['status'] = item[7]
 
         cursor.close()

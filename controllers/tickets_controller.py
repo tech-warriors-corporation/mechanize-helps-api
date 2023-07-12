@@ -42,7 +42,8 @@ class TicketsController(Controller):
             token = request.headers.get('Authorization')
             client_id = request.headers.get('clientId')
             user_id = self.__users_client.get_id_by_token(token, client_id)['payload']
-            result = self.__tickets_service.cancel_ticket(id, user_id)
+            is_mechanic = self.__users_client.is_mechanic(token, client_id)['payload']
+            result = self.__tickets_service.cancel_ticket(id, user_id, is_mechanic)
 
             return generate_response(result, 200)
         except Exception as error:

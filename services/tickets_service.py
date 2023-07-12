@@ -29,7 +29,7 @@ class TicketsService:
 
         return self.__ticket_repository.create(driver_id, vehicle, location, description, status)
 
-    def cancel_ticket(self, id: int, user_id: int) -> int:
+    def cancel_ticket(self, id: int, user_id: int, is_mechanic: bool) -> int:
         if not id:
             raise ValueError('Id is required')
 
@@ -42,7 +42,10 @@ class TicketsService:
         if not isinstance(user_id, int):
             raise ValueError('User id should be integer')
 
-        return self.__ticket_repository.cancel_ticket(id, user_id)
+        if not isinstance(is_mechanic, bool):
+            raise ValueError('Is mechanic should be boolean')
+
+        return self.__ticket_repository.cancel_ticket(id, user_id, is_mechanic)
 
     def accept_ticket(self, id: int, mechanic_id: int) -> int:
         if not id:
