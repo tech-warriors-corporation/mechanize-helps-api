@@ -94,7 +94,10 @@ class TicketsController(Controller):
     @should_be_logged
     def get_ticket_status(self, id: int):
         try:
-            return generate_response(self.__tickets_service.get_ticket_status(id), 200)
+            token = request.headers.get('Authorization')
+            client_id = request.headers.get('clientId')
+
+            return generate_response(self.__tickets_service.get_ticket_status(token, client_id, id), 200)
         except Exception as error:
             print(error)
             return generate_response(status_code=400)
