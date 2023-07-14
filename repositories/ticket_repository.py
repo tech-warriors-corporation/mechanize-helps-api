@@ -140,9 +140,8 @@ class TicketRepository:
         cursor.execute(
             "SELECT id, driver_id, vehicle, location, description, created_date, mechanic_id, status "
             "FROM tickets "
-            "WHERE (status = %s AND (driver_id = %s OR mechanic_id = %s)) OR "
-            "(status <> %s AND driver_id = %s AND mechanic_id IS NOT NULL AND rating IS NULL)",
-            (unsolved_value, user_id, user_id, unsolved_value, user_id)
+            "WHERE (status = %s AND (driver_id = %s OR mechanic_id = %s))",
+            (unsolved_value, user_id, user_id)
         )
 
         item = cursor.fetchone()
