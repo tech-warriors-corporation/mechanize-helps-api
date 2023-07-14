@@ -1,11 +1,15 @@
 from database import get_connection
 from enums.ticket_status_enum import TicketStatusEnum
 from entities.ticket_entity import TicketEntity
+from date import timezone
+from os import environ
+from clients.users_client import UsersClient
 
 class TicketRepository:
     def __init__(self):
         self.__connection = None
         self.__ticket_entity = TicketEntity()
+        self.__users_client = UsersClient(environ.get("ACCOUNTS_API_URL"))
 
     def create(self, driver_id: int, vehicle: str, location: str, description: str, status: str) -> int:
         self.__connection = get_connection()
@@ -94,14 +98,22 @@ class TicketRepository:
 
         return list
 
-    def get_ticket_status(self, id: int):
+    def get_ticket_status(self, token: str, client_id: str, id: int):
         self.__connection = get_connection()
         cursor = self.__connection.cursor()
 
-        cursor.execute(f"SELECT status, mechanic_id FROM tickets WHERE id = {id}")
+        cursor.execute(f"SELECT status, mechanic_id, description, created_date FROM tickets WHERE id = {id}")
 
         result = cursor.fetchone()
-        ticket = { 'status': result[0], 'mechanic_id': result[1] }
+        mechanic_id = result[1]
+
+        ticket = {
+            'status': result[0],
+            'mechanic_id': mechanic_id,
+            'mechanic_name': self.__users_client.get_user_name_by_id(token, client_id, mechanic_id)['payload'],
+            'description': result[2],
+            'created_date': result[3].astimezone(timezone).strftime("%d/%m/%Y (%H:%M)")
+        }
 
         cursor.close()
         self.__connection.close()
@@ -139,9 +151,11 @@ class TicketRepository:
             return item
 
         id = item[0]
+        mechanic_id = item[6]
         location = item[3].split(',')
         ticket = self.__ticket_entity.generate_entity(token, client_id, id, item[1], item[2], location[0], location[1], item[4], item[5])
-        ticket['mechanic_id'] = item[6]
+        ticket['mechanic_id'] = mechanic_id
+        ticket['mechanic_name'] = self.__users_client.get_user_name_by_id(token, client_id, mechanic_id)['payload']
         ticket['status'] = item[7]
 
         cursor.close()
