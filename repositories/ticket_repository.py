@@ -106,11 +106,15 @@ class TicketRepository:
 
         result = cursor.fetchone()
         mechanic_id = result[1]
+        mechanic_name = None
+
+        if mechanic_id is not None:
+            mechanic_name = self.__users_client.get_user_name_by_id(token, client_id, mechanic_id)['payload']
 
         ticket = {
             'status': result[0],
             'mechanic_id': mechanic_id,
-            'mechanic_name': self.__users_client.get_user_name_by_id(token, client_id, mechanic_id)['payload'],
+            'mechanic_name': mechanic_name,
             'description': result[2],
             'created_date': result[3].astimezone(timezone).strftime("%d/%m/%Y (%H:%M)")
         }
@@ -151,10 +155,15 @@ class TicketRepository:
 
         id = item[0]
         mechanic_id = item[6]
+        mechanic_name = None
+
+        if mechanic_id is not None:
+            mechanic_name = self.__users_client.get_user_name_by_id(token, client_id, mechanic_id)['payload']
+
         location = item[3].split(',')
         ticket = self.__ticket_entity.generate_entity(token, client_id, id, item[1], item[2], location[0], location[1], item[4], item[5])
         ticket['mechanic_id'] = mechanic_id
-        ticket['mechanic_name'] = self.__users_client.get_user_name_by_id(token, client_id, mechanic_id)['payload']
+        ticket['mechanic_name'] = mechanic_name
         ticket['status'] = item[7]
 
         cursor.close()
