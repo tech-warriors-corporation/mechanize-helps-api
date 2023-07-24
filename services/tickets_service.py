@@ -1,5 +1,6 @@
 from repositories.ticket_repository import TicketRepository
 from enums.ticket_status_enum import TicketStatusEnum
+from texts import sanitize
 
 class TicketsService:
     def __init__(self, ticket_repository: TicketRepository):
@@ -26,6 +27,9 @@ class TicketsService:
 
         if status != TicketStatusEnum.UNSOLVED.value and status != TicketStatusEnum.SOLVED.value and status != TicketStatusEnum.CANCELLED.value:
             raise ValueError('Status is invalid')
+
+        vehicle = sanitize(vehicle)
+        description = sanitize(description)
 
         return self.__ticket_repository.create(driver_id, vehicle, location, description, status)
 
