@@ -51,13 +51,15 @@ class TicketRepository:
         self.__connection = get_connection()
         cursor = self.__connection.cursor()
 
-        cursor.execute("UPDATE tickets SET mechanic_id = %s WHERE id = %s", (mechanic_id, id))
+        cursor.execute("UPDATE tickets SET mechanic_id = %s WHERE id = %s AND status = %s AND mechanic_id IS NULL RETURNING id", (mechanic_id, id, TicketStatusEnum.UNSOLVED.value))
+
+        result_id = cursor.fetchone()[0]
 
         self.__connection.commit()
         cursor.close()
         self.__connection.close()
 
-        return id
+        return result_id
 
     def conclude_ticket(self, id: int, user_id: int) -> int:
         self.__connection = get_connection()
