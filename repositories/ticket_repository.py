@@ -32,13 +32,13 @@ class TicketRepository:
 
         if is_mechanic is True:
             cursor.execute(
-                "UPDATE tickets SET mechanic_id = NULL WHERE id = %s AND (driver_id = %s OR mechanic_id = %s)",
-                (id, user_id, user_id)
+                "UPDATE tickets SET mechanic_id = NULL WHERE id = %s AND mechanic_id = %s",
+                (id, user_id)
             )
         else:
             cursor.execute(
-                "UPDATE tickets SET status = %s WHERE id = %s AND (driver_id = %s OR mechanic_id = %s)",
-                (TicketStatusEnum.CANCELLED.value, id, user_id, user_id)
+                "UPDATE tickets SET status = %s WHERE id = %s AND driver_id = %s",
+                (TicketStatusEnum.CANCELLED.value, id, user_id)
             )
 
         self.__connection.commit()
@@ -100,11 +100,14 @@ class TicketRepository:
 
         return list
 
-    def get_ticket_status(self, token: str, client_id: str, id: int):
+    def get_ticket_status(self, token: str, client_id: str, id: int, user_id: int):
         self.__connection = get_connection()
         cursor = self.__connection.cursor()
 
-        cursor.execute(f"SELECT status, mechanic_id, description, created_date FROM tickets WHERE id = {id}")
+        cursor.execute(
+            f"SELECT status, mechanic_id, description, created_date FROM tickets WHERE id = %s AND (driver_id = %s OR mechanic_id = %s)",
+            (id, user_id, user_id)
+        )
 
         result = cursor.fetchone()
         mechanic_id = result[1]
