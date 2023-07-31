@@ -96,8 +96,9 @@ class TicketsController(Controller):
         try:
             token = request.headers.get('Authorization')
             client_id = request.headers.get('clientId')
+            user_id = self.__users_client.get_id_by_token(token, client_id)['payload']
 
-            return generate_response(self.__tickets_service.get_ticket_status(token, client_id, id), 200)
+            return generate_response(self.__tickets_service.get_ticket_status(token, client_id, id, user_id), 200)
         except Exception as error:
             print(error)
             return generate_response(status_code=400)

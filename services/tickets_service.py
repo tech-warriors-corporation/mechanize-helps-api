@@ -84,7 +84,7 @@ class TicketsService:
     def get_available_tickets(self, token: str, client_id: str):
         return self.__ticket_repository.get_available_tickets(token, client_id)
 
-    def get_ticket_status(self, token: str, client_id: str, id: int):
+    def get_ticket_status(self, token: str, client_id: str, id: int, user_id: int):
         if not token:
             raise ValueError('Token is required')
 
@@ -103,7 +103,7 @@ class TicketsService:
         if not isinstance(id, int):
             raise ValueError('Id should be integer')
 
-        return self.__ticket_repository.get_ticket_status(token, client_id, id)
+        return self.__ticket_repository.get_ticket_status(token, client_id, id, user_id)
 
     def rating_ticket(self, id: int, driver_id: int, rating: int):
         if not id:
